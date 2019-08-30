@@ -12,15 +12,12 @@ touch ./log/icmpping_end_"$cur_time".txt  ##创建log文件
 logfile=./log/icmpping_end_"$cur_time".txt
 
 
-starttime=`date +%s`
-export starttime
-
 tmp_fifofile="/tmp/$$.fifo"               ##其中$$为该进程的pid
 mkfifo $tmp_fifofile                      ##创建命名管道
 exec 6<>$tmp_fifofile                     ##把文件描述符6和FIFO进行绑定
 rm -f $tmp_fifofile                       ##绑定后，该文件就可以删除了
 thread=20                                 ## 进程并发数为30，用这个数字来控制一次提交的请求数
-awk '{print FNR" "$0}' icmpping > icmpping_new  ## 文本前面添加序号
+awk '{print FNR" "$0}' ip_ning > ip_ning_new  ## 测试ip文本前面添加序号
 
     for ((i=0;i<$thread;i++));
     do
@@ -44,7 +41,7 @@ awk '{print FNR" "$0}' icmpping > icmpping_new  ## 文本前面添加序号
 
                    echo >&6              ##每次执行完a_sub函数后，再增加一个空行，这样下面的进程才可以继续执行
         } &
-    done < icmpping_new
+    done < ip_ning_new
 
 wait                                     ##这里的wait意思是，需要等待以上所有操作（包括后台的进程）都结束后，再往下执行。
 
